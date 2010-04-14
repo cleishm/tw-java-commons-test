@@ -26,6 +26,7 @@
 
     <!-- Output Files -->
     <property name="main.jar" value="${dist.dir}/${app.name}-${build.label}.jar"/>
+    <property name="main-source.jar" value="${dist.dir}/${app.name}-source-${build.label}.jar"/>
     <property name="unit.jar" value="${target.dir}/${app.name}-unit.jar"/>
 
     <!-- Paths -->
@@ -130,6 +131,15 @@
                 classpathref="main.build.classpath"/>
     </target>
 
+    <target name="source-jar">
+        <mkdir dir="${dist.dir}"/>
+        <jar destfile="${main-source.jar}" basedir="${main.src.dir}">
+            <manifest>
+                <attribute name="Build-Label" value="${build.label}"/>
+            </manifest>
+        </jar>
+    </target>
+
     <target name="unit-jar" depends="jar">
         <compileToJar srcdir="${unit.src.dir}"
                 destfile="${unit.jar}"
@@ -142,7 +152,7 @@
     </target>
 
     <!-- Helpers/Wrappers -->
-    <target name="build" depends="unit-test, jar"
+    <target name="build" depends="unit-test, jar, source-jar"
             description="Produce all artifacts"/>
     <target name="rebuild" depends="clean, build"
             description="Clean and build"/>
